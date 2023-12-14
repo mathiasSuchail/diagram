@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with: 
+          # Spécifiez une version compatible avec Node.js 16 ou la dernière version
+          # Utilisez une version spécifique pour éviter les incompatibilités
+          version: v2.4.0
 
       - name: SSH Deploy
         uses: appleboy/ssh-action@master
