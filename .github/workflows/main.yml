@@ -1,8 +1,9 @@
-name: Deploy to server by ssh
+name: Deploy to Server
 
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -11,12 +12,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Use Node.js 21.x
+
+      - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '21.x' # Utilisez la version 16.x ou une version compatible.
+          node-version: '16.x' # Utilisez la version de Node.js que vous nécessitez
 
-      - name: Deploy to Production
-        if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+      - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'bash -s' < deploy_prod.sh
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} debian@141.94.244.135 '.debloy-prod.sh'
