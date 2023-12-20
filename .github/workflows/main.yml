@@ -17,6 +17,6 @@ jobs:
           node-version: '21.x' # Utilisez la version 16.x ou une version compatible. //testdf
 
       - name: Deploy to Production
-        if: github.event.pull_request.merged == true && gb.event.pull_request.base.ref == 'main'
+        if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
         run: |
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'bash -s' < deploy_prod.sh
