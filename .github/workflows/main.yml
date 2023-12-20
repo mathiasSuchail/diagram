@@ -1,4 +1,4 @@
-name: Deploy on PR merge
+name: Deploy to server by ssh
 
 on:
   pull_request:
@@ -6,23 +6,21 @@ on:
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with: 
-          # Spécifiez une version compatible avec Node.js 16 ou la dernière version
-          # Utilisez une version spécifique pour éviter les incompatibilités
-          version: v2.4.0
-
-      - name: SSH Deploy
-        uses: appleboy/ssh-action@master
+      - name: Use Node.js 21.x
+        uses: actions/setup-node@v2
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            echo "Merged PR, running deploy script..."
-            ls -a;
+          node-version: '21.x' # Utilisez la version 16.x ou une version compatible.
+
+      - name: Deploy to Production
+        if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'bash -s' < deploy_prod.sh
+      - name: Deploy to Preproduction
+        if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'bash -s' < deploy_pre.sh
