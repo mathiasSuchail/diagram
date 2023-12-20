@@ -14,7 +14,7 @@ jobs:
       - name: Use Node.js 21.x
         uses: actions/setup-node@v2
         with:
-          node-version: '21.x' # Utilisez la version 16.x ou une version compatible.
+          node-version: '21.x' # Utilisez la version 16.x ou une version compatible. //test
 
       - name: Deploy to Production
         if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
