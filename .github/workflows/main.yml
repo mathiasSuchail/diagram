@@ -16,4 +16,4 @@ jobs:
         if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
         run: |
           echo "{{ secrets.SSH_KEY }}" | cat > ssh
-          ssh -o StrictHostKeyChecking=no -i ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'bash -s' < deploy_prod.sh
+          ssh -o StrictHostKeyChecking=no -i ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} '. deploy_prod.sh'
