@@ -15,6 +15,6 @@ jobs:
       - name: Deploy to Production
         if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
         run: |
-          echo "{{ secrets.SSH_KEY }}" | cat > ssh
-
+          echo "${{ secrets.SSH_KEY }}" > ssh
+          chmod 600 ssh
           ssh -o StrictHostKeyChecking=no -i ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} '. deploy_prod.sh'
